@@ -3,7 +3,7 @@ name: Docker Build and Deploy
 on:
   push:
     branches:
-      - main  # Trigger action on push to main branch
+      - main
 
 jobs:
   build:
@@ -28,7 +28,3 @@ jobs:
           docker tag ${{ secrets.DOCKER_USERNAME }}/bracket:latest ${{ secrets.ECR_REPO_URL }}:latest
           docker push ${{ secrets.ECR_REPO_URL }}:latest
 
-      - name: Deploy to ECS (optional)
-        run: |
-          # Add ECS deploy commands here, if needed
-          echo "Deploying to ECS..."
