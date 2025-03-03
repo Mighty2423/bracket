@@ -19,26 +19,12 @@
     </header>
 
     <main>
-        <form action="register_process.php" method="POST">
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="player">Player</option>
-                <option value="coach">Coach</option>
-                <option value="parent">Parent</option>
-                <option value="organizer">Organizer</option>
-            </select>
-
+        <form action="backend/register.php" method="POST">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Register</button>
-        </form>
+        </form>        
     </main>
 
     <footer>

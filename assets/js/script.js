@@ -49,3 +49,20 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error loading schedule:", error));
     }
 });
+
+fetch("backend/fetch_schedule.php")
+    .then(response => response.json())
+    .then(data => {
+        let scheduleHTML = "";
+        data.forEach(match => {
+            scheduleHTML += `
+                <tr>
+                    <td>${match.team1} vs ${match.team2}</td>
+                    <td>${match.date}</td>
+                    <td>${match.time}</td>
+                    <td>${match.location}</td>
+                </tr>`;
+        });
+        document.getElementById("schedule-table").innerHTML = scheduleHTML;
+    })
+    .catch(error => console.error("Error loading schedule:", error));
