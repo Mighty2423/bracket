@@ -1,0 +1,25 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-action@v1
+        with:
+          cluster: your-cluster-name        # Replace with your ECS cluster name
+          service: your-service-name        # Replace with your ECS service name
+          task-definition: your-task-def   # Replace with your ECS task definition
+          desired-count: 1                 # Desired number of tasks
