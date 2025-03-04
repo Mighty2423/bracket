@@ -39,6 +39,7 @@ button:hover {
 /* Forms */
 input, select, textarea {
     padding: 10px;
+    padding-right: unset;
     margin: 10px 0;
     width: 100%;
     border: 1px solid #ccc;
