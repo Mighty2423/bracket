@@ -1,13 +1,11 @@
 <?php
-$host = "your-db-host";  // Example: "localhost" or AWS RDS endpoint
-$username = "your-db-user";
-$password = "your-db-password";
-$database = "bracket_db";  // Change to your actual database name
+$host = getenv("DATABASE_HOST");
+$user = getenv("DATABASE_USER");
+$password = getenv("DATABASE_PASSWORD");
+$dbname = getenv("DATABASE_NAME");
 
-// Create connection
-$conn = new mysqli($host, $username, $password, $database);
+$conn = new mysqli($host, $user, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
