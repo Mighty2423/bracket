@@ -1,5 +1,5 @@
 @echo off
-echo Creating the project folder structure...
+echo Organizing project files based on your GitHub repository...
 
 :: Create necessary directories
 mkdir frontend
@@ -12,42 +12,41 @@ mkdir frontend\assets
 mkdir frontend\components
 mkdir frontend\responsive
 
-:: Create subdirectories in backend (For future use if PHP or other backend services are added)
+:: Create subdirectories in backend (for future use)
 mkdir backend\api
 mkdir backend\auth
 
 :: Display confirmation
 echo Directories created successfully.
 
-:: Move frontend files
+:: Move frontend files to frontend directory
 echo Moving frontend files...
 move index.html frontend\
 move styles.css frontend\
 move script.js frontend\
 
-:: Move database-related files if any
-echo Moving database files...
-move init.sql database\
-move docker-compose.yml database\
+:: If there are any database files (you don't have any yet), move them here
+echo Moving database files (if any)...
+:: move init.sql database\
 
-:: Move GitHub Actions workflow files
+:: Move GitHub Actions files into workflows directory
 echo Moving GitHub Actions files...
-move deploy.yml .github\workflows\
-move lint.yml .github\workflows\
+move .github\deploy.yml .github\workflows\
+move .github\lint.yml .github\workflows\
 
-:: Create Dockerfile for frontend (if not already present)
+:: Create Dockerfile for frontend (if you want to containerize the frontend)
 echo Creating Dockerfile for frontend...
-echo FROM nginx:latest > Dockerfile
-echo COPY frontend/ /usr/share/nginx/html >> Dockerfile
-echo EXPOSE 80 >> Dockerfile
-echo CMD ["nginx", "-g", "daemon off;"] >> Dockerfile
+echo FROM nginx:latest > frontend\Dockerfile
+echo COPY frontend/ /usr/share/nginx/html >> frontend\Dockerfile
+echo EXPOSE 80 >> frontend\Dockerfile
+echo CMD ["nginx", "-g", "daemon off;"] >> frontend\Dockerfile
 
-:: Create docker-compose.yml for local development (if not already present)
+:: Create docker-compose.yml for local development (optional)
 echo Creating docker-compose.yml for local development...
 echo version: "3.8" > docker-compose.yml
 echo services: >> docker-compose.yml
 echo   frontend: >> docker-compose.yml
-echo     build: . >> docker-compose.yml
+echo     build: ./frontend >> docker-compose.yml
 echo     ports: >> docker-compose.yml
 echo       - "80:80" >> docker-compose.yml
 echo   db: >> docker-compose.yml
@@ -61,14 +60,9 @@ echo       MYSQL_PASSWORD: password >> docker-compose.yml
 echo     ports: >> docker-compose.yml
 echo       - "3306:3306" >> docker-compose.yml
 
-:: Create deploy.sh script for deployment (optional, if planning to deploy via shell)
-echo Creating deploy.sh script...
-echo #!/bin/bash > deploy.sh
-echo ecs-cli configure --cluster my-cluster --region us-east-1 --access-key AWS_ACCESS_KEY --secret-key AWS_SECRET_KEY >> deploy.sh
-echo ecs-cli compose --file docker-compose.yml --project-name bracket service up >> deploy.sh
+:: Display success message
+echo Project files have been successfully organized.
 
-:: Display completion message
-echo Project has been organized successfully!
-
-:: End
+:: Pause to keep the window open
 pause
+
