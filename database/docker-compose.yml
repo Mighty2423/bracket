@@ -1,11 +1,9 @@
 version: "3.8"
 services:
-  web:
+  frontend:
     build: .
     ports:
       - "80:80"
-    depends_on:
-      - db
   db:
     image: mysql:5.7
     restart: always
