@@ -1,16 +1,41 @@
-version: "3.8" 
-services: 
-  frontend: 
-    build: ./frontend 
-    ports: 
-      - "80:80" 
-  db: 
-    image: mysql:5.7 
-    restart: always 
-    environment: 
-      MYSQL_ROOT_PASSWORD: rootpassword 
-      MYSQL_DATABASE: bracket 
-      MYSQL_USER: admin 
-      MYSQL_PASSWORD: password 
-    ports: 
-      - "3306:3306" 
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=rootpassword
+      - DATABASE_NAME=mydb
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
