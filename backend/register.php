@@ -2,9 +2,13 @@
 include 'db_connect.php';  // Include the database connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    die("Invalid email format.");
+}
+
+if (strlen($_POST['password']) < 8) {
+    die("Password must be at least 8 characters long.");
+}
 
     if (!empty($name) && !empty($email) && !empty($password)) {
         $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");

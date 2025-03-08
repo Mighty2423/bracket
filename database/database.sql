@@ -9,6 +9,8 @@ CREATE TABLE Users (
     password_hash VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ALTER TABLE Users CHANGE password_hash password VARCHAR(255);
+
 
 CREATE TABLE Teams (
     team_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -60,3 +62,10 @@ CREATE TABLE Registrations (
     FOREIGN KEY (tournament_id) REFERENCES Tournaments(tournament_id),
     FOREIGN KEY (team_id) REFERENCES Teams(team_id)
 );
+
+CREATE TABLE Schedule (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    match_id INT,
+    FOREIGN KEY (match_id) REFERENCES Matches(match_id) ON DELETE CASCADE
+);
+
