@@ -7,11 +7,8 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 # Copy backend PHP files into the container
 COPY . /var/www/html/
 
-# Set the working directory
-WORKDIR /var/www/html/
-
 # Expose the default Apache port
-EXPOSE 8080
+EXPOSE 80
 
 # Start Apache in the foreground
 CMD ["apache2-foreground"]
