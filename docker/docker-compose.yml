@@ -19,31 +19,15 @@ services:
     ports:
       - "8080:80"
     environment:
-      - DATABASE_HOST=db
+      - DATABASE_HOST=bracket.xxxxxxx.us-east-1.rds.amazonaws.com
       - DATABASE_USER=admin
       - DATABASE_PASSWORD=password
       - DATABASE_NAME=bracket
     depends_on:
-      - db
+      - frontend
     networks:
       - app-network
-
-  db:
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: bracket
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: password
-    ports:
-      - "3306:3306"
-    networks:
-      - app-network
-    volumes:
-      - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
 
 networks:
   app-network:
     driver: bridge
-    
