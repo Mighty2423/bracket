@@ -1,15 +1,12 @@
 # Bracket Tournament Management System
-
-Bracket is a web-based tournament management system for volleyball tournaments. It includes a frontend for users, a PHP backend for business logic, and a MySQL database for storing tournament data. The entire application is containerized using Docker.
+Bracket is a web-based tournament management system for volleyball tournaments. It includes a frontend for users, a PHP backend for business logic, and a MySQL database hosted on AWS RDS. The entire application is containerized using Docker and deployed to AWS ECS.
 
 ## Features
 - User registration and login
 - Team management
 - Tournament scheduling
 - Match tracking
-- Automated database setup using Docker
-
----
+- Automated database setup using AWS RDS
 
 ## Project Structure
 ```
@@ -33,14 +30,11 @@ bracket/
     ├── Dockerfile          # Optional: Combined Dockerfile for the project
 ```
 
----
-
 ## Prerequisites
 Before you start, ensure you have the following installed:
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-
----
+- Docker
+- Docker Compose
+- AWS CLI configured with necessary permissions
 
 ## Setup and Installation
 ### 1️⃣ Clone the Repository
@@ -49,7 +43,7 @@ git clone https://github.com/Mighty2423/bracket.git
 cd bracket/docker
 ```
 
-### 2️⃣ Build and Run the Services
+### 2️⃣ Build and Run the Services Locally (For Testing)
 ```sh
 docker-compose up --build
 ```
@@ -62,12 +56,12 @@ docker ps
 Expected services:
 - **frontend** (NGINX)
 - **backend** (PHP)
-- **db** (MySQL)
+- **db** (AWS RDS - No local container needed)
 
-### 4️⃣ Check Database Setup
+### 4️⃣ Check Database Setup in AWS RDS
 To verify database tables:
 ```sh
-docker exec -it <db_container_id> mysql -uadmin -ppassword -e "SHOW TABLES IN bracket;"
+mysql -h bracket.xxxxxxx.us-east-1.rds.amazonaws.com -uadmin -ppassword -e "SHOW TABLES IN bracket;"
 ```
 Expected tables:
 - Users
@@ -77,37 +71,62 @@ Expected tables:
 - Locations
 - Registrations
 
----
+## Deploying to AWS
+
+### 1️⃣ **Setup AWS RDS for MySQL**
+- Go to **AWS RDS** and create a MySQL database.
+- Set database name: `bracket`
+- Set username: `admin`
+- Store password securely in **AWS Secrets Manager**.
+
+### 2️⃣ **Deploy Backend & Frontend to AWS ECS**
+- Build Docker images and push to **ECR**:
+  ```sh
+  docker build -t bracket-backend ./backend
+  docker build -t bracket-frontend ./frontend
+  ```
+- Create **ECS Fargate Services** for frontend and backend.
+- Use an **Application Load Balancer (ALB)** for traffic routing.
+
+### 3️⃣ **Update Nginx for AWS**
+Ensure `nginx.conf` correctly routes requests:
+```nginx
+location /api/ {
+    proxy_pass http://backend-service:8080/; # Use ECS Service Name
+}
+```
+
+### 4️⃣ **Monitor Logs in CloudWatch**
+Check logs:
+```sh
+aws logs describe-log-groups --query "logGroups[*].logGroupName"
+aws logs tail /ecs/backend-service
+```
 
 ## Stopping and Cleaning Up
-To stop containers:
+To stop containers locally:
 ```sh
 docker-compose down
 ```
-
-To remove all containers and volumes:
+To remove all containers and volumes locally:
 ```sh
 docker-compose down -v
 ```
 
----
+For AWS, delete ECS services, ECR images, and RDS instances when finished.
 
 ## Troubleshooting
-**Problem:** MySQL database not initializing properly.
-- Ensure the `database.sql` file is correctly mapped in `docker-compose.yml`:
-  ```yaml
-  volumes:
-    - ./database/database.sql:/docker-entrypoint-initdb.d/database.sql
-  ```
+### Problem: Database not connecting
+✅ Ensure that the **RDS instance is publicly accessible** and allows inbound MySQL connections (port 3306).
+✅ Check **Security Groups** in AWS and allow traffic from ECS.
+✅ Verify **database credentials** stored in AWS Secrets Manager.
 
-**Problem:** Containers fail to start
-- Run `docker-compose up --build` to rebuild images
-- Use `docker logs <container_id>` for debugging
-
----
+### Problem: Containers fail to start
+✅ Run `docker-compose up --build` to rebuild images.
+✅ Use `docker logs <container_id>` for debugging errors.
 
 ## Future Improvements
 - Implement authentication system
 - Improve UI/UX
 - Add tournament analytics
-- Deploy to AWS using ECS and RDS
+- Optimize AWS deployment for scalability
