@@ -1,0 +1,120 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:721405816311:task-definition/bracket-task:4",
+    "containerDefinitions": [
+        {
+            "name": "frontend",
+            "image": "721405816311.dkr.ecr.us-east-1.amazonaws.com/bracket-frontend:latest",
+            "cpu": 1024,
+            "memory": 1024,
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/bracket-task",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "systemControls": []
+        },
+        {
+            "name": "backend",
+            "image": "721405816311.dkr.ecr.us-east-1.amazonaws.com/bracket-backend:latest",
+            "cpu": 2048,
+            "memory": 2048,
+            "portMappings": [
+                {
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "DATABASE_NAME",
+                    "value": "VolleyballTournament"
+                },
+                {
+                    "name": "DATABASE_HOST",
+                    "value": "bracket.c7ykagzynji7.us-east-1.rds.amazonaws.com"
+                },
+                {
+                    "name": "DATABASE_USER",
+                    "value": "admin"
+                },
+                {
+                    "name": "DATABASE_PASSWORD",
+                    "value": "password"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/bracket-task",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "bracket-task",
+    "taskRoleArn": "arn:aws:iam::721405816311:role/LabRole",
+    "executionRoleArn": "arn:aws:iam::721405816311:role/LabRole",
+    "networkMode": "awsvpc",
+    "revision": 4,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "4096",
+    "memory": "8192",
+    "registeredAt": "2025-03-14T20:14:08.793Z",
+    "registeredBy": "arn:aws:sts::721405816311:assumed-role/voclabs/user3279420=Alton_White",
+    "tags": []
+}
