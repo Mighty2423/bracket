@@ -1,12 +1,11 @@
-
-
 services:
   frontend:
     build:
       context: ../frontend
       dockerfile: Dockerfile
+    restart: always
     ports:
-      - "3000:80"  # Change frontend port to 3000 to avoid conflict
+      - "3000:80" # Change frontend port to 3000 to avoid conflict
     depends_on:
       - backend
     networks:
@@ -18,8 +17,9 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
+    restart: always
     ports:
-      - "5000:80"  # Keep backend on 5000
+      - "5000:80" # Keep backend on 5000
     environment:
       - DATABASE_HOST=bracket.c7ykagzynji7.us-east-1.rds.amazonaws.com
       - DATABASE_USER=admin
@@ -31,4 +31,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
