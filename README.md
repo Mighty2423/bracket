@@ -35,6 +35,27 @@ Before you start, ensure you have the following installed:
 - Docker
 - Docker Compose
 - AWS CLI configured with necessary permissions
+Install Required Packages
+You'll need Nginx, MySQL (or use Docker for it), Docker, and Docker Compose.
+Update System & Install Basics
+sudo yum update -y
+sudo yum install -y git unzip
+Install Docker
+sudo yum install -y docker
+sudo systemctl enable docker
+sudo systemctl start docker
+•	Add your user to the docker group (so you don’t need sudo for Docker commands): 
+sudo usermod -aG docker ec2-user
+Install Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+(Optional) Install MySQL (if not using Docker)
+sudo yum install -y mariadb-server
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+•	Secure the MySQL installation: 
+sudo mysql_secure_installation
 
 ## Setup and Installation
 ### 1️⃣ Clone the Repository
