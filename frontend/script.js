@@ -1,16 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("JavaScript Loaded");
 
-    // Toggle Mobile Menu
-    const menuToggle = document.getElementById("menu-toggle");
-    const navMenu = document.getElementById("nav-menu");
-
-    if (menuToggle) {
-        menuToggle.addEventListener("click", function () {
-            navMenu.classList.toggle("active");
-        });
-    }
-
     // Form Validation for Registration
     const registrationForm = document.getElementById("registration-form");
 
@@ -22,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (name === "" || email === "" || password === "") {
                 alert("All fields are required.");
-                event.preventDefault(); // Stop form submission
+                event.preventDefault();
             }
         });
     }
@@ -34,35 +24,25 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch("backend/fetch_schedule.php")
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    scheduleTable.innerHTML = `<tr><td colspan="4">${data.error}</td></tr>`;
+                    return;
+                }
+
                 let scheduleHTML = "";
                 data.forEach(match => {
                     scheduleHTML += `
                         <tr>
                             <td>${match.team1} vs ${match.team2}</td>
-                            <td>${match.date}</td>
-                            <td>${match.time}</td>
+                            <td>${match.match_time}</td>
                             <td>${match.location}</td>
                         </tr>`;
                 });
                 scheduleTable.innerHTML = scheduleHTML;
             })
-            .catch(error => console.error("Error loading schedule:", error));
+            .catch(error => {
+                scheduleTable.innerHTML = `<tr><td colspan="4">Error loading schedule.</td></tr>`;
+                console.error("Error:", error);
+            });
     }
 });
-
-fetch("backend/fetch_schedule.php")
-    .then(response => response.json())
-    .then(data => {
-        let scheduleHTML = "";
-        data.forEach(match => {
-            scheduleHTML += `
-                <tr>
-                    <td>${match.team1} vs ${match.team2}</td>
-                    <td>${match.date}</td>
-                    <td>${match.time}</td>
-                    <td>${match.location}</td>
-                </tr>`;
-        });
-        document.getElementById("schedule-table").innerHTML = scheduleHTML;
-    })
-    .catch(error => console.error("Error loading schedule:", error));

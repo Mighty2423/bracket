@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule - Volleyball Tournament</title>
     <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/responsive.css">
 </head>
 <body>
     <header>
@@ -21,33 +20,21 @@
     <main>
         <h2>Upcoming Matches</h2>
         <table>
-            <tr>
-                <th>Date</th>
-                <th>Team 1</th>
-                <th>Team 2</th>
-                <th>Time</th>
-                <th>Location</th>
-            </tr>
-            <tr>
-                <td>March 10</td>
-                <td>Team A</td>
-                <td>Team B</td>
-                <td>3:00 PM</td>
-                <td>Gym 1</td>
-            </tr>
-            <tr>
-                <td>March 11</td>
-                <td>Team C</td>
-                <td>Team D</td>
-                <td>5:00 PM</td>
-                <td>Gym 2</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Teams</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody id="schedule-table">
+                <tr><td colspan="4">Loading...</td></tr>
+            </tbody>
         </table>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Southern LA Volleyball Association</p>
-    </footer>
+    <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 </html>
+

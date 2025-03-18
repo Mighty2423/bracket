@@ -1,33 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Southern LA Volleyball Tournament</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/responsive.css">
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("JavaScript Loaded");
 
-</head>
-<body>
-    <header>
-        <h1>Southern LA Volleyball Tournament</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="register.html">Register</a>
-            <a href="teams.html">Teams</a>
-            <a href="schedule.html">Schedule</a>
-        </nav>
-    </header>
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById("menu-toggle");
+    const navMenu = document.getElementById("nav-menu");
 
-    <main>
-        <h2>Upcoming Tournaments</h2>
-        <p>Check out the latest volleyball tournaments happening near you!</p>
-    </main>
+    if (menuToggle) {
+        menuToggle.addEventListener("click", function () {
+            navMenu.classList.toggle("active");
+        });
+    }
 
-    <footer>
-        <p>&copy; 2025 Southern LA Volleyball Association</p>
-    </footer>
-</body>
-<script src="script.js"></script>
+    // Load Upcoming Tournaments
+    const tournamentList = document.getElementById("tournament-list");
 
-</html>
+    if (tournamentList) {
+        fetch("backend/fetch_tournaments.php")
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    tournamentList.innerHTML = "<p>No upcoming tournaments.</p>";
+                } else {
+                    let tournamentHTML = "<ul>";
+                    data.forEach(tournament => {
+                        tournamentHTML += `<li><strong>${tournament.name}</strong> - ${tournament.date} at ${tournament.location}</li>`;
+                    });
+                    tournamentHTML += "</ul>";
+                    tournamentList.innerHTML = tournamentHTML;
+                }
+            })
+            .catch(error => {
+                console.error("Error loading tournaments:", error);
+                tournamentList.innerHTML = "<p>Error loading tournaments.</p>";
+            });
+    }
+});

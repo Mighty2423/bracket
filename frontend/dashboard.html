@@ -9,17 +9,36 @@
 </head>
 <body>
     <h1>Volleyball Bracket Tournament</h1>
-    <div class="bracket">
-        <div class="round">
-            <div class="match">Team 1 vs Team 2</div>
-            <div class="match">Team 3 vs Team 4</div>
-        </div>
-        <div class="round">
-            <div class="match">Winner 1 vs Winner 2</div>
-        </div>
-        <div class="round">
-            <div class="match">Final Winner</div>
+    <div class="bracket-container">
+        <div class="bracket" id="bracket">
+            <!-- Matches will be inserted dynamically -->
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("backend/fetch_bracket.php")
+                .then(response => response.json())
+                .then(data => {
+                    const bracketContainer = document.getElementById("bracket");
+                    bracketContainer.innerHTML = "";
+
+                    data.rounds.forEach((round, roundIndex) => {
+                        let roundDiv = document.createElement("div");
+                        roundDiv.classList.add("round");
+
+                        round.matches.forEach(match => {
+                            let matchDiv = document.createElement("div");
+                            matchDiv.classList.add("match");
+                            matchDiv.innerText = `${match.team1} vs ${match.team2}`;
+                            roundDiv.appendChild(matchDiv);
+                        });
+
+                        bracketContainer.appendChild(roundDiv);
+                    });
+                })
+                .catch(error => console.error("Error loading bracket:", error));
+        });
+    </script>
 </body>
 </html>
